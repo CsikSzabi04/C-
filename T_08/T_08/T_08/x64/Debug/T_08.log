@@ -1,0 +1,4 @@
+﻿  T_08.cpp
+C:\Munka\T_08\T_08\T_08\T_08.cpp(60,11): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Munka\T_08\T_08\T_08\T_08.cpp(72,11): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  T_08.vcxproj -> C:\Munka\T_08\T_08\x64\Debug\T_08.exe
