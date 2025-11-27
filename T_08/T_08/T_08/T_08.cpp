@@ -1,14 +1,13 @@
 #include <iostream>
-#include<fstream>
+#include <fstream>
 #include <string>
-#include <sstream>
 #include <vector>
-#include <utility>
+#include <sstream>
 using namespace std;
 
 struct Jatekos {
 	string nev;
-	int szul_ev;
+	int ev;
 	int p1;
 	int p2;
 	int p3;
@@ -16,16 +15,14 @@ struct Jatekos {
 };
 
 int main() {
-
 	setlocale(LC_ALL, "hun");
 	srand((unsigned int)time(0));
 
-	//f�jl beolvas�s
-	ifstream file("vetelked.txt");
-	if (!file.is_open()) {cout << "Nem siker�lt megnyitni a f�jlt!\n"; return 1;}
+	fstream file("vetelked.txt");
+	if (!file.is_open()) { cout << "Nem nyit meg!\n"; return 1; }
 
-	string sor; 
-	int sorSzam = 0;
+	string sor;
+	int s = 0;
 	vector<Jatekos> csapat1, csapat2;
 
 	while (getline(file, sor)) {
@@ -36,44 +33,51 @@ int main() {
 		while (iss >> nev >> ev) {
 			Jatekos j;
 			j.nev = nev;
-			j.szul_ev = ev;
+			j.ev = ev;
 			j.p1 = rand() % 11;
 			j.p2 = rand() % 11;
 			j.p3 = rand() % 11;
 			j.ossz = j.p1 + j.p2 + j.p3;
-			if (sorSzam == 0) { csapat1.push_back(j); }
-			else if (sorSzam == 1) csapat2.push_back(j);
+			if (s == 0) csapat1.push_back(j);
+			if (s == 1) csapat2.push_back(j);
 		}
-		sorSzam++;
-
+		s++;
 	}
+	 
+	cout << "Eminensek\n\t név(szül.)\t 1.ford\t 2.ford\t 3.ford\t összp.\n";
+	for (const Jatekos& s : csapat1) { cout << "\t " << s.nev << "(" << s.ev << ")\t " << s.p1 << "\t " << s.p2 << "\t " << s.p3 << "\t "<<s.ossz<<"\n"; }
+	int o1 = 0, o2 = 0, o3 = 0, ossz = 0; int p = 0;
+	for (const Jatekos& s : csapat1) { o1 += s.p1; o2 += s.p2; o3 += s.p3; ossz += s.ossz; p++; }
+	float atl1 = ossz / p;
+	cout << "\t összesen:\t " << o1 <<"\t " << o2 << "\t " << o3 << "\t " << ossz << " pont  csapatátlag: " << atl1 << endl;
+	int lg = 0; string nev1 = "";
+	for (const Jatekos& s : csapat1) { if (s.ossz > lg) { lg = s.ossz; nev1 = s.nev; } }
+	cout << "a csapat legjobbja: " << nev1 << " " << lg << " ponttal\n";
 
-	cout << "Eminensek\n\t n�v (sz�l.)\t 1.ford\t 2.ford\t 3.ford\t �sszp.\n";
-	for (const Jatekos& s : csapat1) {cout << "\t " << s.nev << "(" << s.szul_ev << ")\t " << s.p1 << "\t " << s.p2 << "\t " << s.p3 << "\t " << s.ossz << "\n";}
-	int oszl1 = 0, oszl2 = 0, oszl3 = 0, oszlossz1=0;
-	for (const Jatekos& s : csapat1) {
-		oszl1 += s.p1;
-		oszl2 += s.p2;
-		oszl3 += s.p3;
-		oszlossz1 += s.ossz;
-	}
-	int atl1 = csapat1.size();
-	cout << "\t �sszesen: \t " << oszl1 << "\t " << oszl2 << "\t " << oszl3 << "\t " << oszlossz1 << "\t pont   csapat�tlag: " << atl1 << "\n";
+	cout << "Tudorok\n\t név(szül.)\t 1.ford\t 2.ford\t 3.ford\t összp.\n";
+	for (const Jatekos& s : csapat2) { cout << "\t " << s.nev << "(" << s.ev << ")\t " << s.p1 << "\t " << s.p2 << "\t " << s.p3 << "\t " << s.ossz << "\n"; }
+	int o4 = 0, o5 = 0, o6 = 0, ossz1 = 0; int p1 = 0;
+	for (const Jatekos& s : csapat2) { o4 += s.p1; o5 += s.p2; o6 += s.p3; ossz1 += s.ossz; p1++; }
+	float atl2 = ossz1 / p1;
+	cout << "\t összesen:\t " << o4 << "\t " << o5 << "\t " << o6 << "\t " << ossz1 << " pont  csapatátlag: " << atl2 << endl;
+	int lg1 = 0; string nev2 = "";
+	for (const Jatekos& s : csapat2) { if (s.ossz > lg1) { lg1 = s.ossz; nev2 = s.nev; } }
+	cout << "a csapat legjobbja: " << nev2 << " " << lg1 << " ponttal\n";
+	cout << "\n";
 
-	cout << "Tudorok\n\t n�v (sz�l.)\t 1.ford\t 2.ford\t 3.ford\t �sszp.\n";
-	for (const Jatekos& s : csapat2) { cout << "\t " << s.nev << "(" << s.szul_ev << ")\t " << s.p1 << "\t " << s.p2 << "\t " << s.p3 << "\t " << s.ossz << "\n"; }
-	int oszl4 = 0, oszl5 = 0, oszl6 = 0, oszlossz2 = 0;
-	for (const Jatekos& s : csapat2) {
-		oszl4 += s.p1;
-		oszl5 += s.p2;
-		oszl6 += s.p3;
-		oszlossz2 += s.ossz;
-	}
-	int atl2 = csapat2.size();
-	cout << "\t �sszesen: \t " << oszl4 << "\t " << oszl5 << "\t " << oszl6 << "\t " << oszlossz2 << "\t pont   csapat�tlag: " << atl2 << "\n";
-
-	cout << "V�geredm�ny: ";
+	if (ossz > ossz1) cout << "Végeredmény: Eminensek - Tudorok " << ossz << ":" << ossz1 << "\n";
+	if (ossz < ossz1) cout << "Végeredmény: Tudorok - Eminensek " << ossz1 << ":" << ossz << "\n";
+	if (ossz == ossz1) cout << "Végeredmény: Döntetlen!\n";
 	
+	bool i = false;
+
+	if (o1 > 25) { cout << "A(z) Eminensek csapat 25-nél több, azaz " << o1 << "pontot ért el a(z) 1. fordulóban\n"; i = true; }
+	if (o2 > 25) { cout << "A(z) Eminensek csapat 25-nél több, azaz " << o2 << "pontot ért el a(z) 2. fordulóban\n"; i = true;}
+	if (o3 > 25) { cout << "A(z) Eminensek csapat 25-nél több, azaz " << o3 << "pontot ért el a(z) 3. fordulóban\n"; i = true;}
+	if (o4 > 25) { cout << "A(z) Tudorok csapat 25-nél több, azaz " << o4 << "pontot ért el a(z) 1. fordulóban\n"; i = true;}
+	if (o5 > 25) { cout << "A(z) Tudorok csapat 25-nél több, azaz " << o5 << "pontot ért el a(z) 2. fordulóban\n"; i = true;}
+	if (o6 > 25) { cout << "A(z) Tudorok csapat 25-nél több, azaz " << o6 << "pontot ért el a(z) 3. fordulóban\n"; i = true;}
+	if (o1 < 25 && o2 < 25 && o3 < 25 && o4 < 25 && o5 < 25 && o6 < 25 && i == true) { cout << "Egyik csapat egyik fordulóban sem ért el 25-nél több pontot\n"; }
 
 	return 0;
 }
