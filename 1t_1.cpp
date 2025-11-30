@@ -12,6 +12,7 @@ struct A {
 
 int main() {
     setlocale(LC_ALL, "hun");
+    srand((unsigned int)time(0));
 
     // file megnyitása
     fstream file("valaszok.txt");
@@ -46,3 +47,4 @@ int main() {
 
     return 0;
 }
+
