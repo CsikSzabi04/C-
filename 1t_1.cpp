@@ -6,42 +6,43 @@
 using namespace std;
 
 struct A {
-	string els;
-	int mas;
+    string els;  
+    string mas;   
 };
 
 int main() {
-	setlocale(LC_ALL, "hun");
-	srand((unsigned int)time(0));
+    setlocale(LC_ALL, "hun");
 
-	//filebeolvas�s
-	fstream file("asd.txt");
-	if (!file.is_open()) { cout << "Nem nyilik meg :(\n"; return 1; }
+    // file megnyitása
+    fstream file("valaszok.txt");
+    if (!file.is_open()) {cout << "Nem nyilik meg :(\n";return 1;}
 
-	string sor;
-	int s = 0;
-	vector<A> list;
+    string sor;
+    int s = 0;
+    vector<A> list;
 
-	while (getline(file, sor)) {
-		istringstream iss(sor);
-		string a;
-		int b;
+    while (getline(file, sor)) {
+        if (s == 0) {s++; continue;}  // first line out
 
-		while (iss >> a >> b) {
-			A v;
-			v.els = a;
-			v.mas = b;
-			list.push_back(v);
-		}
-		s++;
-	}
+        istringstream iss(sor);
+        string a, b;
 
-	//listbej�r�s
-	for (const A& s : list) {}
+        getline(iss, a, ' ');   // szóközzel elválasztva (vagy bármivel) első tag
+        getline(iss, b);        // szóközzel elválasztva (vagy bármivel) második tag
 
-	//kiirat�s
-	ofstream ki("fgh.txt");
-	for (const A& s : list) if (s.mas < 80) ki << "";
+        A v;
+        v.els = a;
+        v.mas = b;
 
-	return 0;
+        list.push_back(v);
+        s++;
+    }
+
+    for (const A& s : list) {cout << s.els << " - " << s.mas << "\n"; }
+    
+    ofstream ki("fgh.txt");
+    for (const A& t : list) {ki << t.els << "-" << t.mas << "\n";}
+    
+
+    return 0;
 }
