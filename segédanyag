@@ -22,22 +22,16 @@ int main() {
     int s = 0;
     vector<A> list;
 
-    while (getline(file, sor)) {
+       
+	while (getline(file, sor)) {
         if (s == 0) {s++; continue;}  // first line out
 
-        istringstream iss(sor);
-        string a, b;
+		istringstream iss(sor);
+		A v;
+		iss >> v.p0 >> v.p1 >> v.v0 >> v.v1 >> v.pl0 >> v.pl1;
 
-        getline(iss, a, ' ');   // szóközzel elválasztva (vagy bármivel) első tag
-        getline(iss, b);        // szóközzel elválasztva (vagy bármivel) második tag
-
-        A v;
-        v.els = a;
-        v.mas = b;
-
-        list.push_back(v);
-        s++;
-    }
+		list.push_back(v);
+	}
 
     for (const A& s : list) {cout << s.els << " - " << s.mas << "\n"; }
     
@@ -47,4 +41,5 @@ int main() {
 
     return 0;
 }
+
 
