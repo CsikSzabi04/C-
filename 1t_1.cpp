@@ -1,72 +1,58 @@
 #include <iostream>
-#include <sstream>
+#include <vector>
 #include <string>
 #include <fstream>
-#include <vector>
+#include <sstream>
 using namespace std;
 
 struct A {
-    string els;  
-    string mas;   
-    int p;
+	int p0, p1;
+	string v0, v1;
+	int sl1;
+	int pl1;
 };
 
-
-int Osszpont(const vector<A>& list) {
-    int ossz = 0;
-    for (const A& s : list) ossz += s.p;
-    return ossz;
-}
-
 int main() {
-    setlocale(LC_ALL, "hun");
-    srand((unsigned int)time(0));
+	setlocale(LC_ALL, "hun");
+	
+	fstream file("merkozes.txt");
+	if (!file.is_open()) { cout << "Nem nyÃ­lik meg\n"; return 1; }
 
-    // file megnyitása
-    fstream file("valaszok.txt");
-    if (!file.is_open()) { cout << "Nem nyilik meg :(\n"; return 1; }
+	string sor;
+	vector<A> list;
 
-    string sor;
-    string elsosor;
-    int s = 0;
-    vector<A> list;
-    int pp = 0;
+	while (getline(file, sor)) {
+		istringstream iss(sor);
 
-    while (getline(file, sor)) {
-        if (s == 0) { elsosor = sor; s++; continue; }  // first line out
+		A s;
+		iss >> s.p0 >> s.p1 >> s.v0 >> s.v1;
 
-        istringstream iss(sor);
-        string a, b;
+		s.sl1 = rand() % 4 + 2;
+		
+		do {
+			cout << s.v0 << " - " << s.v1 << " piros lap (0-4): ";
+			cin >> s.pl1;
+		} while (s.pl1 < 0 || s.pl1 > 4);
 
-        getline(iss, a, ' ');   // szóközzel elválasztva (vagy bármivel) elsõ tag
-        getline(iss, b);        // szóközzel elválasztva (vagy bármivel) második tag
+		list.push_back(s);
+	}
 
-        A v;
-        v.els = a;
-        v.mas = b;
-        v.p = 0;
-        for (int i = 0; i < elsosor.size() && i < v.mas.size(); i++) { if (v.mas[i] == elsosor[i]) { v.p++; } }
-        list.push_back(v);
-        s++;
-    }
+	cout << "\nÃ–sszesen " << list.size() << " mÃ©rkÅ‘zÃ©s volt\n";
+	for (const A& s : list) cout << s.v0 << " - " << s.v1 << " " << s.p0 << " : " << s.p1 << " sÃ¡rgalap:" << s.sl1 << " piroslap: " << s.pl1 << "\n";
 
+	int o = 0;
+	for (const A& s : list) o += s.p1 + s.p0;
+	cout << "\nA fordulÃ³ban az Ã¶sszes gÃ³l: " << o << "\n";
 
+	A legk = list[0];   
+	for (const A& s : list) if (s.p0 + s.p1 < legk.p0 + legk.p1) legk = s;   
+	cout << "\nA legkevesebb gÃ³los mÃ©rkÅ‘zÃ©s: "<< legk.v0 << " - " << legk.v1 << " "<< legk.p0 << " : " << legk.p1<< " sÃ¡rgalap:" << legk.sl1<< " piroslap:" << legk.pl1 << "\n";
 
-    cout << elsosor << "\t\t helyes válaszok\n";
-    int a = 1;
-    for (const A& s : list) { cout << s.els << "  " << s.mas << "\t " << a << ".versenyzó kódjai és adatai (pontjai: " << s.p << ")\n"; a++; }
+	int h = 0, v = 0, d = 0;
+	for (const A& s : list) {if (s.p0 > s.p1) h++;if (s.p0 < s.p1) v++;if (s.p0 == s.p1) d++;}
+	cout << "\nhazai gy: " << h << " vendÃ©g gy: " << v << " dÃ¶ntetlen: " << d << endl << "\n";
 
-    cout << "\nÖsszesen " << a - 1 << " versenyzõ vett részt\n";
-    int k = 0; string n; for (const A& s : list)if (s.p > k) { k = s.p; n = s.els; } cout << "A legtöbbpontot elérte: " << n << ": " << k << "\n";
-    for (const A& s : list) if (s.mas == elsosor) cout << "Maximálisat elért versenyzõ: " << s.els << " - " << s.p << " pont\n";
-    
-    int asd = elsosor.size()/2; int o = 0;
-    for (const A& s : list) if(s.p < asd) o++;
-    cout << "A versenyzõkbõl " << o << "-an nem tudtak válaszolni a felére.\n";
+	for (const A& s : list) if (s.p0 + s.p1 < 6) cout << s.v0 << " - " << s.v1 << " " << s.p0 << " : " << s.p1 << endl;
 
-    int ossz = Osszpont(list);
-    cout << "Összesen az összes versenyzõ pontja: " << ossz << "\n";
-    
-
-    return 0;
+	return 0;
 }
